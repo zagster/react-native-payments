@@ -352,7 +352,7 @@ export default class PaymentRequest {
     //
     // Developers will only have access to it in the `PaymentResponse`.
     if (IS_ANDROID) {
-      const { shippingAddress } = details;
+      const { shippingAddress, paymentToken } = details;
       this._shippingAddress = shippingAddress;
     }
 
@@ -367,7 +367,8 @@ export default class PaymentRequest {
       payerPhone: this._options.requestPayerPhone ? this._shippingAddress.phone : null,
       payerEmail: IS_ANDROID && this._options.requestPayerEmail
         ? details.payerEmail
-        : null
+        : null,
+      paymentToken: details.paymentToken,
     });
 
     return this._acceptPromiseResolver(paymentResponse);

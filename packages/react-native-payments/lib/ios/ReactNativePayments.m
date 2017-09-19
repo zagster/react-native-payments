@@ -271,7 +271,9 @@ RCT_EXPORT_METHOD(handleDetailsUpdate: (NSDictionary *)details
 {
     NSDecimalNumber *decimalNumberAmount = [NSDecimalNumber decimalNumberWithString:displayItem[@"amount"][@"value"]];
     PKPaymentSummaryItem *paymentSummaryItem = [PKPaymentSummaryItem summaryItemWithLabel:displayItem[@"label"] amount:decimalNumberAmount];
-
+    if ([displayItem[@"pending"] boolValue] == YES) {
+        [paymentSummaryItem setType:PKPaymentSummaryItemTypePending];
+    }
     return paymentSummaryItem;
 }
 

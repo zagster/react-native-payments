@@ -32,6 +32,7 @@ export default class PaymentResponse {
     this._payerName = paymentResponse.payerName;
     this._payerPhone = paymentResponse.payerPhone;
     this._payerEmail = paymentResponse.payerEmail;
+    this._paymentToken = paymentResponse.paymentToken;
 
     // Internal Slots
     this._completeCalled = false;
@@ -77,6 +78,10 @@ export default class PaymentResponse {
     return this._payerEmail;
   }
 
+  get paymentToken(): null | string {
+    return this._paymentToken;
+  }
+
   // https://www.w3.org/TR/payment-request/#complete-method
   complete(paymentStatus: PaymentComplete) {
     if (this._completeCalled === true) {
@@ -85,10 +90,12 @@ export default class PaymentResponse {
 
     this._completeCalled = true;
 
+    return NativePayments.complete(paymentStatus);
+/*
     return new Promise((resolve, reject) => {
-      return NativePayments.complete(paymentStatus, () => {
-        return resolve(undefined);
+      NativePayments.complete(paymentStatus, () => {
+        resolve(undefined);
       });
-    });
+    });*/
   }
 }
