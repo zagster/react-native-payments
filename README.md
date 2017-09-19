@@ -1,3 +1,5 @@
+> Zagster fork with bug fixes for apple pay
+
 > This project is currently in __beta and APIs are subject to change.__
 
 # React Native Payments
