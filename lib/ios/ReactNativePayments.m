@@ -14,8 +14,9 @@ RCT_EXPORT_MODULE()
 - (NSDictionary *)constantsToExport
 {
     return @{
-             @"canMakePayments": @([PKPaymentAuthorizationViewController canMakePayments]),
+             @"canMakePayments": @([ReactNativePayments canMakePayments]),
              @"supportedGateways": [GatewayManager getSupportedGateways]
+             
              };
 }
 
@@ -50,14 +51,19 @@ RCT_EXPORT_METHOD(createPaymentRequest: (NSDictionary *)methodData
     callback(@[[NSNull null]]);
 }
 
+
 RCT_EXPORT_METHOD(show:(RCTResponseSenderBlock)callback)
 {
 
     self.viewController = [[PKPaymentAuthorizationViewController alloc] initWithPaymentRequest: self.paymentRequest];
     self.viewController.delegate = self;
 
-    // TODO - Replace `rootViewController` with a the top rootViewController
-    UIViewController *ctrl = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    if (self.viewController == nil) {
+        callback(@[@"Error creating Apple Pay dialog.  Make sure the device is not configured to support Apple Pay."]);
+        return;
+    }
+    UIViewController *rootViewController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    UIViewController *ctrl = [self topViewController:rootViewController];
     [ctrl presentViewController:self.viewController animated:YES completion:nil];
 
     callback(@[[NSNull null]]);
@@ -80,6 +86,22 @@ RCT_EXPORT_METHOD(complete: (NSString *)paymentStatus
     }
 
     callback(@[[NSNull null]]);
+}
+
+- (UIViewController *)topViewController:(UIViewController *)rootViewController
+{
+    if (rootViewController.presentedViewController == nil) {
+        return rootViewController;
+    }
+    
+    if ([rootViewController.presentedViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *navigationController = (UINavigationController *)rootViewController.presentedViewController;
+        UIViewController *lastViewController = [[navigationController viewControllers] lastObject];
+        return [self topViewController:lastViewController];
+    }
+    
+    UIViewController *presentedViewController = (UIViewController *)rootViewController.presentedViewController;
+    return [self topViewController:presentedViewController];
 }
 
 
@@ -339,4 +361,14 @@ RCT_EXPORT_METHOD(handleDetailsUpdate: (NSDictionary *)details
      ];
 }
 
++ (BOOL)canMakePayments
+{
+    NSArray *paymentNetworks = [NSArray arrayWithObjects:PKPaymentNetworkMasterCard, PKPaymentNetworkVisa, PKPaymentNetworkAmex, nil];
+    if ([PKPaymentAuthorizationViewController canMakePaymentsUsingNetworks:paymentNetworks]) {
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
 @end
