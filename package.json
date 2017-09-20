@@ -2,7 +2,7 @@
   "_from": "git://github.com/zagster/react-native-payments.git#master",
   "_id": "react-native-payments@0.3.1",
   "_inBundle": false,
-  "_integrity": "sha1-FJDuDucWdTmhNadPNF18Rc/c/tw=",
+  "_integrity": "sha1-sCXiTcd5c9gOQwihYpOrDKcZj7Q=",
   "_location": "/react-native-payments",
   "_phantomChildren": {},
   "_requested": {
@@ -19,7 +19,7 @@
     "#USER",
     "/"
   ],
-  "_resolved": "git://github.com/zagster/react-native-payments.git#73fd154c4b0901b6d34ec8f4d6f628bfe926d875",
+  "_resolved": "git://github.com/zagster/react-native-payments.git#b9d56b46ed6ffc7717386234bf42be9b9ac25178",
   "_spec": "react-native-payments@git://github.com/zagster/react-native-payments.git#master",
   "_where": "/Users/pmclure/ws/nativeMobile",
   "author": {
